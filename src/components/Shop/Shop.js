@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import fakeData from '../../fakeData';
 import { addToDatabaseCart, getDatabaseCart } from '../../utilities/databaseManager';
 import Cart from '../Cart/Cart';
 import Product from '../Product/Product';
@@ -8,20 +7,40 @@ import { Link } from 'react-router-dom';
 
 
 const Shop = () => {
-    const first10 = fakeData.slice(0, 10);
-
-    const [products, setProducts] = useState(first10);
+    // const first10 = fakeData.slice(0, 10);
+    // const [products, setProducts] = useState(first10);
+    
+    const [products, setProducts] = useState([]);
     const [cart, setCart] = useState([]);
 
     useEffect(() => {
-        const savedCard = getDatabaseCart();
-        const productKey = Object.keys(savedCard);
-        const previousCart = productKey.map(pdKey => {
-            const product = fakeData.find(pd => pd.key === pdKey);
-            product.quantity = savedCard[pdKey];
-            return product;
+        fetch('http://localhost:5000/products')
+        .then(res=>res.json())
+        .then(data =>{
+            setProducts(data);
         })
-        setCart(previousCart);
+    },[])
+
+    useEffect(() => {
+        const savedCard = getDatabaseCart();
+        const productKeys = Object.keys(savedCard);
+        // if(products.length>0){
+        //     const previousCart = productKey.map(pdKey => {
+        //         const product = products.find(pd => pd.key === pdKey);
+        //         product.quantity = savedCard[pdKey];
+        //         return product;
+        //     })
+        //     setCart(previousCart);
+        // }
+        fetch('http://localhost:5000/productsByKeys',{
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(productKeys)
+        })
+        .then(res => res.json())
+        .then(data => setCart(data))
     }, [])
 
     const handleAddProduct = (product) => {

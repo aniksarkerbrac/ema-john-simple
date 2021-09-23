@@ -22,12 +22,22 @@ const Review = () => {
     useEffect(() => {
         const savedCard = getDatabaseCart();
         const productKeys = Object.keys(savedCard);
-        const cartProducts = productKeys.map(key => {
-            const product = fakeData.find(pd => pd.key === key);
-            product.quantity = savedCard[key];
-            return product;
-        });
-        setCart(cartProducts);
+
+        fetch('http://localhost:5000/productsByKeys',{
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(productKeys)
+        })
+        .then(res => res.json())
+        .then(data => setCart(data))
+        // const cartProducts = productKeys.map(key => {
+        //     const product = fakeData.find(pd => pd.key === key);
+        //     product.quantity = savedCard[key];
+        //     return product;
+        // });
+        // setCart(cartProducts);
     }, []);
 
     const removeProduct = productKey => {
