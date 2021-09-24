@@ -23,7 +23,7 @@ const Review = () => {
         const savedCard = getDatabaseCart();
         const productKeys = Object.keys(savedCard);
 
-        fetch('http://localhost:5000/productsByKeys',{
+        fetch('https://limitless-ridge-07841.herokuapp.com/productsByKeys',{
             method: 'POST',
             headers: {
                 'content-type': 'application/json'

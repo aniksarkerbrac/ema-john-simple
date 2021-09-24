@@ -14,7 +14,7 @@ const Shop = () => {
     const [cart, setCart] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:5000/products')
+        fetch('https://limitless-ridge-07841.herokuapp.com/products')
         .then(res=>res.json())
         .then(data =>{
             setProducts(data);
@@ -32,7 +32,7 @@ const Shop = () => {
         //     })
         //     setCart(previousCart);
         // }
-        fetch('http://localhost:5000/productsByKeys',{
+        fetch('https://limitless-ridge-07841.herokuapp.com/productsByKeys',{
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
